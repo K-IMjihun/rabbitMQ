@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Chat Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+</head>
+<body>
+<h1>WebSocket Chat Test</h1>
+
+<p id="status">Connecting...</p>
+
+<div id="messages" style="border: 1px solid #000; padding: 10px; margin-top: 20px; height: 200px; overflow-y: auto;"></div>
+
+<div>
+    <input type="text" id="messageInput" placeholder="Type a message" />
+    <button onclick="sendMessage()">Send</button>
+</div>
+
+<script>
+    let stompClient = null;  // stompClient는 전역 변수로 선언
+
+    // WebSocket 연결 함수
+    function connectWebSocket() {
+        const socket = new WebSocket('ws://localhost:8090/ws-stomp');  // 서버의 WebSocket URL
+
+        // WebSocket이 열린 후 stompClient 생성
+        stompClient = Stomp.over(socket);  // Stomp 객체를 사용하여 stompClient 생성
+
+        stompClient.connect({}, function (frame) {
+            console.log('Connected: ' + frame);
+
+            // 연결 성공 시 상태 업데이트
+            const statusElement = document.getElementById('status');
+            statusElement.innerText = 'WebSocket 연결 완료!';
+
+            // 채팅방 구독 (roomId는 실제 값으로 변경)
+            const roomId = 'roomId';  // 실제 roomId로 변경
+            stompClient.subscribe('/topic/chat.' + roomId, function (messageOutput) {
+                console.log("Received message: ", messageOutput.body);
+
+                // 메시지 출력
+                const messageDiv = document.getElementById('messages');
+                const messageElement = document.createElement('div');
+                messageElement.innerText = messageOutput.body;
+                messageDiv.appendChild(messageElement);
+            });
+        });
+    }
+
+    // 페이지 로드 시 WebSocket 연결
+    window.onload = function () {
+        const statusElement = document.getElementById('status');
+        statusElement.innerText = 'WebSocket 연결 대기 중...';
+        connectWebSocket();
+    };
+
+    // 메시지 전송 함수
+    function sendMessage() {
+        const messageInput = document.getElementById('messageInput');
+        const message = {
+            sender: 'Test User 2',  // 실제 사용자 이름으로 변경
+            type: 'ENTER',  // 'ENTER', 'LEAVE', 또는 'CHAT' 메시지 유형
+            roomId: 'roomId',  // 실제 roomId로 변경
+            message: messageInput.value
+        };
+
+        // WebSocket이 연결되었을 경우에만 메시지 전송
+        if (stompClient) {
+            stompClient.send("/app/chat-sendMessage", {}, JSON.stringify(message));
+            messageInput.value = '';  // 메시지 전송 후 입력 필드 비우기
+        } else {
+            console.log('WebSocket이 연결되지 않았습니다.');
+        }
+    }
+</script>
+</body>
+</html>
