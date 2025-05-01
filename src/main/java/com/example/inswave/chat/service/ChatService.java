@@ -46,6 +46,13 @@ public class ChatService {
     // 메시지 전송 메서드
     public void sendMessage(ChatMessage message) {
         log.info("Send message to RabbitMQ: {}", message);
+
+        if (ChatMessage.MessageType.ENTER.equals(message.getType())) {
+            message.setMessage(message.getSender() + "님이 입장했습니다.");
+        } else if (ChatMessage.MessageType.LEAVE.equals(message.getType())) {
+            message.setMessage(message.getSender() + "님이 퇴장했습니다.");
+        }
+        // 클라이언트에게 메시지 전송
         rabbitTemplate.convertAndSend("chat.exchange", "chat." + message.getRoomId(), message);
     }
 }

@@ -36,17 +36,6 @@ public class ChatController {
     @MessageMapping("/chat-sendMessage")
     public void sendMessage(@Payload ChatMessage chatMessage) {
         log.info("Received message: {}", chatMessage);
-
-        if (ChatMessage.MessageType.ENTER.equals(chatMessage.getType())) {
-            chatMessage.setMessage(chatMessage.getSender() + "님이 입장했습니다.");
-        } else if (ChatMessage.MessageType.LEAVE.equals(chatMessage.getType())) {
-            chatMessage.setMessage(chatMessage.getSender() + "님이 퇴장했습니다.");
-        }
-
-        // RabbitMQ를 통해 메시지 전송
         chatService.sendMessage(chatMessage);
-
-        // 클라이언트에게 메시지 전송
-        messagingTemplate.convertAndSend("/topic/chat." + chatMessage.getRoomId(), chatMessage);
     }
 }
