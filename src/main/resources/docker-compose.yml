@@ -1,0 +1,17 @@
+services:
+  rabbitmq:
+    image: kjh950901/inswave_2_3:v1
+    ports:
+      - "5672:5672"      # AMQP
+      - "15672:15672"    # Web UI
+      - "61613:61613"    # STOMP
+
+#services:
+#  rabbitmq:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    ports:
+#      - "5672:5672"
+#      - "15672:15672"
+#      - "61613:61613"
