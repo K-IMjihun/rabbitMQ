@@ -16,7 +16,6 @@ import java.util.*;
 @Service
 public class ChatService {
     private final RabbitTemplate rabbitTemplate;
-    private final SimpMessageSendingOperations messagingTemplate;
     private Map<String, ChatRoom> chatRooms;
 
     @PostConstruct
