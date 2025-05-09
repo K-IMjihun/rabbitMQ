@@ -28,33 +28,41 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-
 	implementation "org.springframework.boot:spring-boot-starter-jdbc"
 
-	//tomcat 서버
-	implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
-	//서블릿 jsp 설정
-	implementation 'jakarta.servlet:jakarta.servlet-api' //스프링부트 3.0 이상
-	//jstl 설정
-	implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api' //스프링부트 3.0 이상
-	implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl' //스프링부트 3.0 이상
-
+	// mybatis
 	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
 
-	implementation 'com.oracle.database.jdbc:ojdbc8:19.8.0.0'
+	// mysql
+	implementation 'mysql:mysql-connector-java:8.0.33'
 
+	// thymeleaf
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+	// security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	// jwt
+	implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.3'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.3'
+
+
+	// 롬복
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-
+	// 실시간 통신
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 	implementation 'org.webjars:sockjs-client:1.0.2'
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 	implementation 'org.springframework:spring-messaging'
 	implementation 'org.webjars:stomp-websocket:2.3.4'
 	implementation 'io.projectreactor.netty:reactor-netty'
+
+	// 테스트
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {
