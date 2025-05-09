@@ -1,0 +1,43 @@
+#services:
+#  rabbitmq:
+#    image: kjh950901/inswave_2_3:v1
+#    ports:
+#      - "5672:5672"      # AMQP
+#      - "15672:15672"    # Web UI
+#      - "61613:61613"    # STOMP
+
+#services:
+#  rabbitmq:
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    ports:
+#      - "5672:5672"
+#      - "15672:15672"
+#      - "61613:61613"
+
+services:
+  jenkins:
+    container_name: jenkins-container
+    build:
+      dockerfile: src/main/resources/dockerfiles/jenkinsDockerfile/Dockerfile
+    image: jenkins-image
+    restart: unless-stopped
+    user: root
+    ports:
+      - "8888:8080"  # 외부 포트 8090을 컨테이너의 8080 포트에 매핑
+      - "50000:50000"  # Jenkins slave와 통신하는 포트
+    volumes:
+      - /home/groot/jenkins:/var/jenkins_home  # Jenkins 데이터 지속성
+      - /home/groot/.ssh:/root/.ssh  # SSH 키 매핑
+
+  rabbitmq:
+    container_name: rabbitmq-container
+    build:
+      dockerfile: src/main/resources/dockerfiles/rabbitmqDokerfile/Dockerfile
+    image: rabbitmq-image
+    ports:
+      - "5672:5672"  # AMQP 프로토콜 포트
+      - "15672:15672"  # RabbitMQ 관리 UI 포트
+      - "61613:61613"  # STOMP 프로토콜 포트
+    restart: unless-stopped  # RabbitMQ 서비스 재시작 설정
