@@ -35,6 +35,7 @@ public class ChatController {
     // WebSocket 메시지 핸들링
     @MessageMapping("/chat-sendMessage")
     public void sendMessage(@Payload ChatMessage chatMessage) {
+        log.info("test");
         log.info("Received message: {}", chatMessage);
         chatService.sendMessage(chatMessage);
     }
