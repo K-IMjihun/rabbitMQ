@@ -35,7 +35,7 @@ public class RabbitMQConfig {
 
     @Bean
     RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
-        System.out.println("내가 잘못했다 좀 돼라");
+        System.out.println("도커 및 도커컴포즈 파일 따로저장");
         RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(new Jackson2JsonMessageConverter());
         return rabbitTemplate;
